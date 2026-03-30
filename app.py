@@ -53,13 +53,12 @@ def create_app():
         completed = resolved_tickets + closed_tickets # Calculate number of tickets no longer in progress
 
         if total_tickets > 0: # If we have any tickets at all, then calculate the percentage of completed tickets.
-            completion_percentage = ((completed / total_tickets) * 100) 
+            completion_percentage = round((completed / total_tickets) * 100) 
         else: 
             completion_percentage = 0 # If we have no tickets, then the percentage of completed tickets is 0.
 
-        # Display the ten most recent tickets on dashboard.
-
-        # We are using the order_by method to sort our tickets by creation date
+        # order_by method used to order tickets in descending order based on their created_at timestamp.
+        # We limit it to 10 most recent tickets only and print out all results that match our query.
         recent_tickets = Ticket.query.order_by(Ticket.created_at.desc()).limit(10).all()
 
         # Updated return: Return all types of tickets and completed percentage alongside our dashboard.html display.
@@ -72,8 +71,6 @@ def create_app():
                                completion_percentage=completion_percentage,
                                recent_tickets=recent_tickets)
     
-
-
     # If we visit the URL /tickets/new, run this function.
     # POST will send data to requested body.
     # GET will just get the page without sending any data. 
