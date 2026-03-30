@@ -35,6 +35,31 @@ def create_app():
     def dashboard():    # Run this function.
         return render_template("dashboard.html") # display dashboard.html.
 
+    # If we visit the URL /tickets/new, run this function. 
+    # POST will send data to requested body.
+    # GET will just get the page without sending any data. 
+    @app.route("/tickets/new", methods = ["GET", "POST"])
+    def new_ticket():
+        if request.method == "POST": # If we submit the form on the new ticket page
+            title = request.form["title"] # Get the title from the form.
+            description = request.form["description"] # Get the description from the form.
+            priority = request.form["priority"] # Get the priority from the form.
+            assigned_to = request.form["assigned_to"] # Get the assigned_to from the form.
+
+        # Create a new Ticket object using our Ticket class in database.py
+            ticket = Ticket(
+                title = title,
+                description = description,
+                priority = priority,
+                assigned_to = assigned_to
+            )
+
+            database.session.add(ticket) # Add the new ticket to our database session.
+            database.session.commit() # Commit the session to save the ticket in our database.
+
+            return redirect(url_for("dashboard")) # After saving, redirect us back to the dashboard.
+        return render_template("new_ticket.html") # If we just visit the page, show the new_ticket.html form.
+
     return app
 
 if __name__ == "__main__":
