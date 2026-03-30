@@ -139,6 +139,39 @@ def create_app():
 
         # If the user is just visiting the edit page, show the edit_ticket.html file.
         return render_template("edit_ticket.html", ticket=ticket)
+    
+
+    # AI Implementation: This route will allow us to view all tickets.
+    @app.route("/tickets")
+    def all_tickets():
+        # Get search and filter values from URL parameters
+        search   = request.args.get("search", "")
+        priority = request.args.get("priority", "")
+        status   = request.args.get("status", "")
+
+        # Start with all tickets
+        query = Ticket.query
+
+        # Apply search filter if user typed something
+        if search:
+            query = query.filter(Ticket.title.like(f"%{search}%"))
+
+        # Apply priority filter if selected
+        if priority:
+            query = query.filter_by(priority=priority)
+
+        # Apply status filter if selected
+        if status:
+            query = query.filter_by(status=status)
+
+        # Execute query ordered by newest first
+        tickets = query.order_by(Ticket.created_at.desc()).all()
+
+        return render_template("tickets.html",
+                            tickets=tickets,
+                            search=search,
+                            priority=priority,
+                            status=status)
 
     return app
 
