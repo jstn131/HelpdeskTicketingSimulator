@@ -69,11 +69,12 @@ def create_app():
                                in_progress=in_progess, 
                                resolved_tickets=resolved_tickets, 
                                closed_tickets=closed_tickets, 
-                               completion_percentage=completion_percentage)
+                               completion_percentage=completion_percentage,
+                               recent_tickets=recent_tickets)
     
 
 
-    # If we visit the URL /tickets/new, run this function. 
+    # If we visit the URL /tickets/new, run this function.
     # POST will send data to requested body.
     # GET will just get the page without sending any data. 
     @app.route("/tickets/new", methods = ["GET", "POST"])
