@@ -9,9 +9,7 @@ from datetime import datetime
 # Create an instance of the database
 database = SQLAlchemy()
 
-# Below we will create the ticketing table
-# Each class is going to represent on table in the database
-# Each variable will represent a column in the table.
+# Create a Ticket model to represent support tickets in the system
 class Ticket(database.Model):
     # This is the name of the table in the database
     __tablename__ = "tickets"
@@ -56,6 +54,8 @@ class Ticket(database.Model):
     def __repr__(self):
         return f"<Ticket {self.id}: {self.title}>"
 
+
+# Create a Comment model to represent comments on tickets.
 class Comment(database.Model):
     __tablename__ = "comments"
 
