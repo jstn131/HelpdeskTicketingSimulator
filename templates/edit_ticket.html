@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Ticket #{{ ticket.id }}</title>
+</head>
+<body>
+    <nav>
+        <a href="/">Dashboard</a>
+        <a href="/tickets/new">New Ticket</a>
+    </nav>
+
+    <h1>Edit Ticket #{{ ticket.id }} — {{ ticket.title }}</h1>
+
+    <form action="/tickets/{{ ticket.id }}/edit" method="POST">
+
+        <label>Status</label>
+        <select name="status">
+            <option value="Open" {{ 'selected' if ticket.status == 'Open' }}>Open</option>
+            <option value="In Progress" {{ 'selected' if ticket.status == 'In Progress' }}>In Progress</option>
+            <option value="Resolved" {{ 'selected' if ticket.status == 'Resolved' }}>Resolved</option>
+            <option value="Closed" {{ 'selected' if ticket.status == 'Closed' }}>Closed</option>
+        </select>
+
+        <label>Priority</label>
+        <select name="priority">
+            <option value="Low" 
+                {{ 'selected' if ticket.priority == 'Low' }}>Low</option>
+            <option value="Medium" 
+                {{ 'selected' if ticket.priority == 'Medium' }}>Medium</option>
+            <option value="High" 
+                {{ 'selected' if ticket.priority == 'High' }}>High</option>
+            <option value="Critical" 
+                {{ 'selected' if ticket.priority == 'Critical' }}>Critical</option>
+        </select>
+
+        <label>Assign To</label>
+        <select name="assigned_to">
+            <option value="Unassigned" 
+                {{ 'selected' if ticket.assigned_to == 'Unassigned' }}>Unassigned</option>
+            <option value="Agent 1" 
+                {{ 'selected' if ticket.assigned_to == 'Agent 1' }}>Agent 1</option>
+            <option value="Agent 2" 
+                {{ 'selected' if ticket.assigned_to == 'Agent 2' }}>Agent 2</option>
+            <option value="Agent 3" 
+                {{ 'selected' if ticket.assigned_to == 'Agent 3' }}>Agent 3</option>
+        </select>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <a href="/tickets/{{ ticket.id }}">Cancel</a>
+</body>
+</html>
