@@ -108,6 +108,37 @@ def create_app():
                   .order_by(Comment.created_at.asc()).all()
         
         return render_template("view_ticket.html", ticket=ticket, comments=comments)
+    
+    @app.route("/tickets/<int:ticket_id>/comment", methods=["POST"])
+    def add_comment(ticket_id):
+        # Ensure that the ticket exists before creating a comment for it.
+        ticket = Ticket.query.get_or_404(ticket_id)
+
+        note = request.form["note"] # Get the comment note from the form.
+        # Create a new Comment object using our Comment class in database.
+        comment = Comment(note = note, ticket_id = ticket_id)
+
+        database.session.add(comment)
+        database.session.commit()
+
+        # Return the user back to the ticket detail page after they have added a comment.
+        return redirect(url_for("ticket_detail", ticket_id=ticket_id))
+
+    @app.route("/tickets/<int:ticket_id>/edit", methods=["GET", "POST"])
+    def edit_ticket(ticket_id):
+        ticket = Ticket.query.get_or_404(ticket_id)
+
+        if request.method == "POST":
+            ticket.status = request.form["status"] # Update the ticket's status with the new value from the form.
+            ticket.priority = request.form["priority"] # Update the ticket's priority with the new value from the form.
+            ticket.assigned_to = request.form["assigned_to"] # Update the ticket's assigned_to with the new value from the form.
+
+            database.session.commit()
+
+            return redirect(url_for("ticket_detail", ticket_id=ticket.id))
+
+        # If the user is just visiting the edit page, show the edit_ticket.html file.
+        return render_template("edit_ticket.html", ticket=ticket)
 
     return app
 
